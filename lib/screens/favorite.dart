@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/meal_details.dart';
 import 'package:meals/widgets/meal_item.dart';
+import 'package:meals/data/dummy_data.dart';
 class CalorieProgressTracker extends StatelessWidget {
   final double caloriesConsumed;
   final double goalCalories;
@@ -18,6 +19,7 @@ class CalorieProgressTracker extends StatelessWidget {
 
     return Column(
       children: [
+        const SizedBox(height: 30,),
         Container(
           width: 200,
           height: 200,
@@ -45,15 +47,24 @@ class CalorieProgressTracker extends StatelessWidget {
 
 class FavScreen extends StatelessWidget {
   const FavScreen({
-    super.key,
+    Key? key,
     this.title,
     required this.meals,
     required this.onToggleFavorite,
-  });
+  }) : super(key: key);
 
   final String? title;
   final List<Meal> meals;
   final void Function(Meal meal) onToggleFavorite;
+
+  double getTotalConsumedCalories() {
+    // Calculate the total consumed calories from the list of meals
+    double totalCalories = 0.0;
+    for (var meal in meals) {
+      totalCalories += meal.calories;
+    }
+    return totalCalories;
+  }
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
@@ -68,53 +79,53 @@ class FavScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double totalConsumedCalories = getTotalConsumedCalories();
+    double goalCalories = 3000; // Replace with your goal calories
+
     Widget content = Column(
       children: [
-       CalorieProgressTracker(
-          caloriesConsumed: 1500,  // Replace with actual consumed calories
-          goalCalories: 3000,  // Replace with your goal calories
+        CalorieProgressTracker(
+          caloriesConsumed: totalConsumedCalories,
+          goalCalories: goalCalories,
         ),
         SizedBox(height: 10),
-     const SizedBox(height: 10),  // Add some space between text and listview
-      Expanded(
-        child: ListView.builder(
-          itemCount: meals.length,
-          itemBuilder: (ctx, index) => MealItem(
-            meal: meals[index],
-            onSelectMeal: (meal) {
-              selectMeal(context, meal);
-            },
+        const SizedBox(height: 10),  // Add some space between text and listview
+        Expanded(
+          child: ListView.builder(
+            itemCount: meals.length,
+            itemBuilder: (ctx, index) => MealItem(
+              meal: meals[index],
+              onSelectMeal: (meal) {
+                selectMeal(context, meal);
+              },
+            ),
           ),
         ),
-      ),
-    ],
-    );
-    
-    ;
-   
-    if(meals.isEmpty)
-    {
-      Widget content=Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Uh oh ... nothing here!',
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Try selecting a different category!',
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-          ),
-        ],
-      ),
+      ],
     );
 
+    if (meals.isEmpty) {
+      Widget content = Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Uh oh ... nothing here!',
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Try selecting a different category!',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+            ),
+          ],
+        ),
+      );
+      return content;
     }
 
     if (title == null) {
