@@ -6,8 +6,11 @@ import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
+import 'package:meals/screens/monthlypage.dart';
 import 'package:meals/screens/favorite.dart';
 import 'package:meals/widgets/main_drawer.dart';
+import 'package:intl/intl.dart';
+
 
 const kInitialFilters = {
   Filter.glutenFree: false,
@@ -49,25 +52,36 @@ class _TabsScreenState extends State<TabsScreen> {
       _showInfoMessage('Meal is no longer a favorite.');
        
     } else {
-      setState (() async{
-        _favoriteMeals.add(meal);
-        _showInfoMessage('Marked as a favorite!');
+  final currentDate = DateTime.now();
+  final formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+  final formattedDayOfWeek = DateFormat('EEEE').format(currentDate);
+  final formattedTime = DateFormat('HH:mm:ss').format(currentDate);
 
-        final url=Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com','todays_meals.json');
-        final response=await http.post(url,headers: 
+  setState(() async {
+    _favoriteMeals.add(meal);
+    _showInfoMessage('Marked as a favorite!');
+
+    final url = Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com', 'todays_meals.json');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(
         {
-          'Content-Type':'application/json',
-        },body: json.encode(
-          {
-            'name':meal.title,
-            'calories':meal.calories,
-          }
-        ));
-        print(response.body);
-        print(response.statusCode);
-      });
-      
-    }
+          'name': meal.title,
+          'calories': meal.calories,
+          'date': formattedDate,
+          'dayOfWeek': formattedDayOfWeek,
+          'time': formattedTime,
+        },
+      ),
+    );
+    print(response.body);
+    print(response.statusCode);
+  });
+}
+
   }
 
   void _selectPage(int index) {
@@ -124,6 +138,13 @@ class _TabsScreenState extends State<TabsScreen> {
       );
       activePageTitle = 'Your Favorites';
     }
+     if (_selectedPageIndex == 2) {
+      activePage = MonthlyPage(
+
+      );
+      
+    
+  }
 
     return Scaffold(
       appBar: AppBar(
@@ -145,6 +166,10 @@ class _TabsScreenState extends State<TabsScreen> {
             icon: Icon(Icons.star),
             label: 'Favorites',
           ),
+           BottomNavigationBarItem(
+      icon: Icon(Icons.calendar_today),  // Add an icon for MonthlyPage
+      label: 'Monthly',
+    ),
         ],
       ),
     );
