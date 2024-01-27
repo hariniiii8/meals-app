@@ -49,21 +49,24 @@ class _TabsScreenState extends State<TabsScreen> {
       _showInfoMessage('Meal is no longer a favorite.');
        
     } else {
-      setState(() {
+      setState (() async{
         _favoriteMeals.add(meal);
         _showInfoMessage('Marked as a favorite!');
 
-        final url=Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com','meals-list.json');
-        http.post(url,headers: 
+        final url=Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com','todays_meals.json');
+        final response=await http.post(url,headers: 
         {
           'Content-Type':'application/json',
         },body: json.encode(
           {
             'name':meal.title,
-            'calories':meal.isGlutenFree,
+            'calories':meal.calories,
           }
         ));
+        print(response.body);
+        print(response.statusCode);
       });
+      
     }
   }
 

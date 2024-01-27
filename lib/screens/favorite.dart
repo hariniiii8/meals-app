@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/meal_details.dart';
 import 'package:meals/widgets/meal_item.dart';
-import 'package:meals/data/dummy_data.dart';
+
 class CalorieProgressTracker extends StatelessWidget {
   final double caloriesConsumed;
   final double goalCalories;
@@ -19,13 +18,13 @@ class CalorieProgressTracker extends StatelessWidget {
 
     return Column(
       children: [
-        const SizedBox(height: 30,),
+        const SizedBox(height: 30),
         Container(
-          width: 200,
-          height: 200,
+          width: 100,
+          height: 100,
           child: CircularProgressIndicator(
             value: progress,
-            strokeWidth: 20,
+            strokeWidth: 10,
             backgroundColor: Colors.grey[300],
             valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
@@ -45,7 +44,7 @@ class CalorieProgressTracker extends StatelessWidget {
   }
 }
 
-class FavScreen extends StatelessWidget {
+class FavScreen extends StatefulWidget {
   const FavScreen({
     Key? key,
     this.title,
@@ -57,13 +56,27 @@ class FavScreen extends StatelessWidget {
   final List<Meal> meals;
   final void Function(Meal meal) onToggleFavorite;
 
-  double getTotalConsumedCalories() {
-    // Calculate the total consumed calories from the list of meals
+  @override
+  _FavScreenState createState() => _FavScreenState();
+}
+
+class _FavScreenState extends State<FavScreen> {
+  double totalConsumedCalories = 0.0; // State variable to track consumed calories
+
+  @override
+  void initState() {
+    super.initState();
+    updateTotalConsumedCalories();
+  }
+
+  void updateTotalConsumedCalories() {
     double totalCalories = 0.0;
-    for (var meal in meals) {
+    for (var meal in widget.meals) {
       totalCalories += meal.calories;
     }
-    return totalCalories;
+    setState(() {
+      totalConsumedCalories = totalCalories;
+    });
   }
 
   void selectMeal(BuildContext context, Meal meal) {
@@ -71,7 +84,7 @@ class FavScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (ctx) => MealDetailsScreen(
           meal: meal,
-          onToggleFavorite: onToggleFavorite,
+          onToggleFavorite: widget.onToggleFavorite,
         ),
       ),
     );
@@ -79,22 +92,21 @@ class FavScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double totalConsumedCalories = getTotalConsumedCalories();
-    double goalCalories = 3000; // Replace with your goal calories
-
     Widget content = Column(
       children: [
         CalorieProgressTracker(
           caloriesConsumed: totalConsumedCalories,
-          goalCalories: goalCalories,
+          goalCalories: 3000, // Replace with your goal calories
         ),
         SizedBox(height: 10),
-        const SizedBox(height: 10),  // Add some space between text and listview
+        Text( 'Total Calories consumed: ${totalConsumedCalories.toString()} kcal'
+          ,style: TextStyle(fontSize: 16, color: Colors.grey),),
+        const SizedBox(height: 10), // Add some space between text and listview
         Expanded(
           child: ListView.builder(
-            itemCount: meals.length,
+            itemCount: widget.meals.length,
             itemBuilder: (ctx, index) => MealItem(
-              meal: meals[index],
+              meal: widget.meals[index],
               onSelectMeal: (meal) {
                 selectMeal(context, meal);
               },
@@ -104,7 +116,7 @@ class FavScreen extends StatelessWidget {
       ],
     );
 
-    if (meals.isEmpty) {
+    if (widget.meals.isEmpty) {
       Widget content = Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -128,13 +140,13 @@ class FavScreen extends StatelessWidget {
       return content;
     }
 
-    if (title == null) {
+    if (widget.title == null) {
       return content;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title!),
+        title: Text(widget.title!),
       ),
       body: content,
     );
