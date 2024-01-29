@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "560491690614",
+    "firebase_url": "https://loginandsignupdetails-29eb5-default-rtdb.firebaseio.com",
+    "project_id": "loginandsignupdetails-29eb5",
+    "storage_bucket": "loginandsignupdetails-29eb5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560491690614:android:63f748c8fda47a9ef33d57",
+        "android_client_info": {
+          "package_name": "com.example.meals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs9Br6mj0uAFd91uqSHASK1GgHUJR59ZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
