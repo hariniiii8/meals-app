@@ -10,6 +10,7 @@ import 'package:meals/screens/monthlypage.dart';
 import 'package:meals/screens/favorite.dart';
 import 'package:meals/widgets/main_drawer.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 const kInitialFilters = {
@@ -149,6 +150,15 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
+         actions: [
+          
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+          ),
+        ],
       ),
       drawer: MainDrawer(
         onSelectScreen: _setScreen,
