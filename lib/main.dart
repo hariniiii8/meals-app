@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals/screens/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:meals/screens/categories.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:meals/screens/tabs.dart';
 
@@ -30,7 +31,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      home: const AuthScreen(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (ctx, snapshot) {
+            if (snapshot.hasData) {
+              return const TabsScreen();
+            }
+
+            return const AuthScreen();
+          }),
     );
   }
 }
