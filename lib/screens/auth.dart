@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meals/screens/intro1.dart';
+import 'package:meals/screens/tabs.dart';
 
 final _firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  State<AuthScreen> createState() {
-    return _AuthScreenState();
-  }
+  _AuthScreenState createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
@@ -31,14 +31,36 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       if (_isLogin) {
         final userCredentials = await _firebase.signInWithEmailAndPassword(
-            email: _enteredEmail, password: _enteredPassword);
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+
+        // Check if the login is successful
+        if (userCredentials.user != null) {
+          // Navigate to the next screen after a successful login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => TabsScreen()), // Replace with your desired screen
+          );
+        }
       } else {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
-            email: _enteredEmail, password: _enteredPassword);
+          email: _enteredEmail,
+          password: _enteredPassword,
+        );
+
+        // Check if the user creation is successful
+        if (userCredentials.user != null) {
+          // Navigate to the next screen after successful user creation
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Intro1Page()), // Replace with your desired screen
+          );
+        }
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {
-        // ...
+        // Handle the case where the email is already in use
       }
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -70,6 +92,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               Card(
                 margin: const EdgeInsets.all(20),
+                color: Colors.white,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -80,7 +103,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         children: [
                           TextFormField(
                             decoration: const InputDecoration(
-                                labelText: 'Email Address'),
+                              labelText: 'Email Address',
+                            ),
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false,
                             textCapitalization: TextCapitalization.none,
@@ -90,7 +114,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                   !value.contains('@')) {
                                 return 'Please enter a valid email address.';
                               }
-
                               return null;
                             },
                             onSaved: (value) {
@@ -98,8 +121,9 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                           TextFormField(
-                            decoration:
-                                const InputDecoration(labelText: 'Password'),
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                            ),
                             obscureText: true,
                             validator: (value) {
                               if (value == null || value.trim().length < 6) {
@@ -115,9 +139,8 @@ class _AuthScreenState extends State<AuthScreen> {
                           ElevatedButton(
                             onPressed: _submit,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primaryContainer,
                             ),
                             child: Text(_isLogin ? 'Login' : 'Signup'),
                           ),
@@ -144,3 +167,5 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
+
+
