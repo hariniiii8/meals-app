@@ -60,7 +60,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   setState(() async {
     _favoriteMeals.add(meal);
-    _showInfoMessage('Marked as a favorite!');
+    _showInfoMessage('Meal tracked');
 
     final url = Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com', 'todays_meals.json');
     final response = await http.post(
@@ -137,7 +137,7 @@ class _TabsScreenState extends State<TabsScreen> {
         meals: _favoriteMeals,
         onToggleFavorite: _toggleMealFavoriteStatus,
       );
-      activePageTitle = 'Your Favorites';
+      activePageTitle = 'Calories Today';
     }
      if (_selectedPageIndex == 2) {
       activePage = MonthlyPage(
@@ -174,7 +174,7 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
-            label: 'Favorites',
+            label: 'Today',
           ),
            BottomNavigationBarItem(
       icon: Icon(Icons.calendar_today),  // Add an icon for MonthlyPage
