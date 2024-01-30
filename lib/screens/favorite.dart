@@ -26,7 +26,7 @@ class CalorieProgressTracker extends StatelessWidget {
             value: progress,
             strokeWidth: 10,
             backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(138, 71, 235, 1)),
           ),
         ),
         SizedBox(height: 10),
@@ -99,8 +99,10 @@ class _FavScreenState extends State<FavScreen> {
           goalCalories: 3000, // Replace with your goal calories
         ),
         SizedBox(height: 10),
-        Text( 'Total Calories consumed: ${totalConsumedCalories.toString()} kcal'
-          ,style: TextStyle(fontSize: 16, color: Colors.grey),),
+        Text(
+          'Total Calories consumed: ${totalConsumedCalories.toString()} kcal',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
         const SizedBox(height: 10), // Add some space between text and listview
         Expanded(
           child: ListView.builder(
@@ -124,15 +126,15 @@ class _FavScreenState extends State<FavScreen> {
             Text(
               'Uh oh ... nothing here!',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
               'Try selecting a different category!',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                color: Color.fromRGBO(138, 71, 235, 1),
+              ),
             ),
           ],
         ),
@@ -145,10 +147,14 @@ class _FavScreenState extends State<FavScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Color.fromRGBO(138, 71, 235, 1),
       appBar: AppBar(
         title: Text(widget.title!),
       ),
-      body: content,
+      body: Container(
+        color: Color.fromRGBO(138, 71, 235, 1), // Set your desired background color here
+        child: content,
+      ),
     );
   }
 }

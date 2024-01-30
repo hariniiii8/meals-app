@@ -67,6 +67,7 @@ class MealsScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Color.fromRGBO(138, 71, 235, 1),
       appBar: AppBar(
         title: Text(title!),
       ),

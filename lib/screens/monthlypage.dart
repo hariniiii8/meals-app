@@ -84,7 +84,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
         title: Text('Monthly Page'),
       ),
       body:Container(
-        color: Color.fromARGB(255, 210, 101, 230),
+        color: Color.fromRGBO(138, 71, 235, 1),
         child: Column(
         children: [
           Expanded(

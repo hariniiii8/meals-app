@@ -38,7 +38,7 @@ class App extends StatelessWidget {
               return const TabsScreen();
             }
 
-            return  AuthScreen();
+            return  const AuthScreen();
           }),
     
     );
