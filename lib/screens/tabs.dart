@@ -5,6 +5,7 @@ import 'package:meals/data/dummy_data.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
+import 'package:meals/screens/intro1.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/screens/monthlypage.dart';
 import 'package:meals/screens/favorite.dart';
@@ -65,7 +66,7 @@ Map<String, int> _favoriteMealCounts = {};
     _favoriteMealCounts[meal.id] = 1;
     _showInfoMessage('Meal tracked');
 
-    final url = Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com', 'todays_meals.json');
+    final url = Uri.https('newproject-cdc5a-default-rtdb.firebaseio.com', 'todays_meals.json');
     final response = await http.post(
       url,
       headers: {
@@ -83,6 +84,7 @@ Map<String, int> _favoriteMealCounts = {};
     );
     print(response.body);
     print(response.statusCode);
+
   });
 }
 
@@ -143,9 +145,7 @@ Map<String, int> _favoriteMealCounts = {};
       activePageTitle = 'Calories Today';
     }
      if (_selectedPageIndex == 2) {
-      activePage = MonthlyPage(
-
-      );
+      activePage = MonthlyPage();
       
     
   }

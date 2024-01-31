@@ -20,7 +20,7 @@ class _MonthlyPageState extends State<MonthlyPage> {
   }
 
   Future<void> _fetchMonthlyData() async {
-    final url = Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com',
+    final url = Uri.https('newproject-cdc5a-default-rtdb.firebaseio.com',
         'todays_meals.json');
     final response = await http.get(url);
 

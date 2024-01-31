@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meals/screens/intro1.dart';
-import 'package:meals/screens/tabs.dart';
+import 'package:meals/screens/setting.dart'; // Import the new screen
 
 final _firebase = FirebaseAuth.instance;
 
@@ -19,6 +19,16 @@ class _AuthScreenState extends State<AuthScreen> {
   var _enteredEmail = '';
   var _enteredPassword = '';
 
+  void navigateToSettingsScreen(User user) {
+    // Navigate to SettingsScreen and pass the user details
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingsScreen(user: user),
+      ),
+    );
+  }
+
   void _submit() async {
     final isValid = _form.currentState!.validate();
 
@@ -35,13 +45,8 @@ class _AuthScreenState extends State<AuthScreen> {
           password: _enteredPassword,
         );
 
-        // Check if the login is successful
         if (userCredentials.user != null) {
-          // Navigate to the next screen after a successful login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TabsScreen()), // Replace with your desired screen
-          );
+          navigateToSettingsScreen(userCredentials.user!);
         }
       } else {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
@@ -49,13 +54,8 @@ class _AuthScreenState extends State<AuthScreen> {
           password: _enteredPassword,
         );
 
-        // Check if the user creation is successful
         if (userCredentials.user != null) {
-          // Navigate to the next screen after successful user creation
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Intro1Page()), // Replace with your desired screen
-          );
+          navigateToSettingsScreen(userCredentials.user!);
         }
       }
     } on FirebaseAuthException catch (error) {
@@ -167,5 +167,3 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
-
