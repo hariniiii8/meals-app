@@ -33,7 +33,7 @@ class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favoriteMeals = [];
   Map<Filter, bool> _selectedFilters = kInitialFilters;
-
+Map<String, int> _favoriteMealCounts = {};
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -46,11 +46,13 @@ class _TabsScreenState extends State<TabsScreen> {
   void _toggleMealFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
 
-    if (isExisting) {
+   if (isExisting) {
       setState(() {
-        _favoriteMeals.remove(meal);
+        // Meal is already in favorites, increment the count
+        _favoriteMealCounts[meal.id] = (_favoriteMealCounts[meal.id] ?? 1) + 1;
+        _favoriteMeals.add(meal);
       });
-      _showInfoMessage('Meal is no longer a favorite.');
+      _showInfoMessage('Meal tracked!');
        
     } else {
   final currentDate = DateTime.now();
@@ -60,6 +62,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   setState(() async {
     _favoriteMeals.add(meal);
+    _favoriteMealCounts[meal.id] = 1;
     _showInfoMessage('Meal tracked');
 
     final url = Uri.https('flutterproject-e937e-default-rtdb.firebaseio.com', 'todays_meals.json');

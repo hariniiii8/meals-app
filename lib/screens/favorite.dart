@@ -126,7 +126,7 @@ class _FavScreenState extends State<FavScreen> {
             Text(
               'Uh oh ... nothing here!',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                color: Color.fromRGBO(138, 71, 235, 1),
+                color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
             const SizedBox(height: 16),
@@ -151,7 +151,10 @@ class _FavScreenState extends State<FavScreen> {
       appBar: AppBar(
         title: Text(widget.title!),
       ),
-      body: content,
+      body: Container(
+        color: Color.fromRGBO(138, 71, 235, 1), // Set your desired background color here
+        child: content,
+      ),
     );
   }
 }
