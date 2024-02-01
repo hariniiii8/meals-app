@@ -60,7 +60,7 @@ class Intro3Page extends StatelessWidget {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TabsScreen()),
+                  MaterialPageRoute(builder: (context) => AuthScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
