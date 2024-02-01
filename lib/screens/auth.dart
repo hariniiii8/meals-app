@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:meals/screens/tabs.dart';
+import 'package:meals/screens/user_details.dart';
 import 'package:meals/widgets/user_image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meals/screens/intro1.dart'; // Import IntroPage
+import 'package:meals/screens/intro1.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firebase = FirebaseAuth.instance;
@@ -28,6 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
   var _enteredUsername = '';
   File? _selectedImage;
   var _isAuthenticating = false;
+  UserCredential? userCredentials; // Initialize with a non-null value
 
   void _submit() async {
     final isValid = _form.currentState!.validate();
@@ -45,12 +47,12 @@ class _AuthScreenState extends State<AuthScreen> {
       });
 
       if (_isLogin) {
-        final userCredentials = await _firebase.signInWithEmailAndPassword(
+        userCredentials = await _firebase.signInWithEmailAndPassword(
           email: _enteredEmail,
           password: _enteredPassword,
         );
       } else {
-        final userCredentials = await _firebase.createUserWithEmailAndPassword(
+        userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEmail,
           password: _enteredPassword,
         );
@@ -58,39 +60,44 @@ class _AuthScreenState extends State<AuthScreen> {
         final storageRef = FirebaseStorage.instance
             .ref()
             .child('user_images')
-            .child('${userCredentials.user!.uid}.jpg');
+            .child('${userCredentials!.user!.uid}.jpg');
 
         await storageRef.putFile(_selectedImage!);
         final imageUrl = await storageRef.getDownloadURL();
         print(imageUrl);
-         await FirebaseFirestore.instance
+
+        await FirebaseFirestore.instance
             .collection('users')
-            .doc(userCredentials.user!.uid)
+            .doc(userCredentials!.user!.uid)
             .set({
           'username': _enteredUsername,
           'email': _enteredEmail,
           'image_url': imageUrl,
         });
+
+        // Navigate to UserDetailsScreen only if it's a signup
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => UserDetailsScreen(userId: userCredentials!.user!.uid),
+          ),
+        );
       }
 
-      
-
-      // Authentication successful, navigate to Intro1Page
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => TabsScreen()),
-      );
-
+      if (_isLogin) {
+        // Navigate to the main app screen or any other screen for login
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => TabsScreen(),
+          ),
+        );
+      }
     } on FirebaseAuthException catch (error) {
-      if (error.code == 'email-already-in-use') {
-        // ...
-      }
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.message ?? 'Authentication failed.'),
         ),
       );
-
     } finally {
       setState(() {
         _isAuthenticating = false;
