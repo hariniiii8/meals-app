@@ -14,9 +14,12 @@ class UserDetailsScreen extends StatefulWidget {
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // Add variables for height and weight
+  // Add variables for height, weight, date of birth, name, and phone number
   var _enteredHeight = '';
   var _enteredWeight = '';
+  var _enteredDateOfBirth = '';
+  var _enteredName = '';
+  var _enteredPhoneNumber = '';
   var _userName = ''; // Add a variable to store the username
 
   @override
@@ -58,6 +61,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       'username': _userName, // Add username to the user_details document
       'height': _enteredHeight,
       'weight': _enteredWeight,
+      'date_of_birth': _enteredDateOfBirth,
+      'name': _enteredName,
+      'phone_number': _enteredPhoneNumber,
       // Add other details fields as needed
     });
 
@@ -106,6 +112,45 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   },
                   onSaved: (value) {
                     _enteredWeight = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Date of Birth'),
+                  keyboardType: TextInputType.datetime,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your date of birth.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _enteredDateOfBirth = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _enteredName = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Phone Number'),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _enteredPhoneNumber = value!;
                   },
                 ),
                 ElevatedButton(

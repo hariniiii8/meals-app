@@ -15,6 +15,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var _userName = '';
   var _userHeight = '';
   var _userWeight = '';
+  var _userDateOfBirth = '';
+  var _userPhoneNumber = '';
 
   @override
   void initState() {
@@ -32,11 +34,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final userName = userDetailsDoc['username'];
       final userHeight = userDetailsDoc['height'];
       final userWeight = userDetailsDoc['weight'];
+      final userDateOfBirth = userDetailsDoc['date_of_birth'];
+      final userPhoneNumber = userDetailsDoc['phone_number'];
 
       setState(() {
         _userName = userName;
         _userHeight = userHeight;
         _userWeight = userWeight;
+        _userDateOfBirth = userDateOfBirth;
+        _userPhoneNumber = userPhoneNumber;
       });
     } catch (error) {
       // Handle the error (e.g., show a message)
@@ -64,18 +70,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           const Text(
+            const Text(
               'User Details',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-           const SizedBox(height: 10),
+            const SizedBox(height: 10),
             Card(
               elevation: 3,
               child: Container(
-                color:const Color.fromRGBO(138, 71, 235, 1),
+                color: const Color.fromRGBO(138, 71, 235, 1),
                 child: ListTile(
                   title: const Text(
                     'Username:',
@@ -94,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Card(
               elevation: 3,
               child: Container(
-                color:const Color.fromRGBO(138, 71, 235, 1),
+                color: const Color.fromRGBO(138, 71, 235, 1),
                 child: ListTile(
                   title: const Text(
                     'Height:',
@@ -105,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   subtitle: Text(
                     _userHeight,
-                    style:const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -124,6 +130,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   subtitle: Text(
                     _userWeight,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              elevation: 3,
+              child: Container(
+                color: const Color.fromRGBO(138, 71, 235, 1),
+                child: ListTile(
+                  title: const Text(
+                    'Date of Birth:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  subtitle: Text(
+                    _userDateOfBirth,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              elevation: 3,
+              child: Container(
+                color: const Color.fromRGBO(138, 71, 235, 1),
+                child: ListTile(
+                  title: const Text(
+                    'Phone Number:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  subtitle: Text(
+                    _userPhoneNumber,
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
