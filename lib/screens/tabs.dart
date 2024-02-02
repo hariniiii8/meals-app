@@ -12,6 +12,7 @@ import 'package:meals/screens/favorite.dart';
 import 'package:meals/widgets/main_drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:meals/screens/settings.dart';
 
 
 const kInitialFilters = {
@@ -156,10 +157,14 @@ Map<String, int> _favoriteMealCounts = {};
          actions: [
           
           IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
+            icon: Icon(Icons.settings),
+             onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SettingsScreen(userId: FirebaseAuth.instance.currentUser!.uid),
+              ),
+            );
+          },
           ),
         ],
       ),
